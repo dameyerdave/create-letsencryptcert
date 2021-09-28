@@ -13,6 +13,13 @@ data_path="./data/certbot"
 email="" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
+#if [ "$1" == "-r" ]; then
+#  echo "### Renewing certificate ..."
+#  docker-compose run --rm --entrypoint "certbot certonly --force-renew --cert-name ${DOMAIN}" certbot
+#  echo
+#  exit 0
+#fi
+
 if [ -d "$data_path" ]; then
   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
@@ -85,6 +92,6 @@ echo "### Stoping and removing nginx ..."
 docker-compose stop nginx
 docker-compose rm -f nginx
 
-sudo cp data/certbot/conf/live/api.svip.ch/fullchain.pem ${DOMAIN}.chain.crt.pem
-sudo cp data/certbot/conf/live/api.svip.ch/privkey.pem ${DOMAIN}.privkey.pem
+sudo cp data/certbot/conf/live/${DOMAIN}/fullchain.pem ${DOMAIN}.chain.crt.pem
+sudo cp data/certbot/conf/live/${DOMAIN}/privkey.pem ${DOMAIN}.privkey.pem
 sudo cp data/certbot/conf/ssl-dhparams.pem dhparams.pem
